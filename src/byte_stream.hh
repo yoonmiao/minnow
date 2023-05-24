@@ -18,7 +18,7 @@ protected:
   uint64_t nread_ = 0;
   bool error_ = false;
   bool closed_ = false;
-  std::deque<char> buf_ {};
+  std::vector<char> buf_ {};
 
 public:
   explicit ByteStream( uint64_t capacity );

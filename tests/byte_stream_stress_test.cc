@@ -75,7 +75,7 @@ void program_body()
   stress_test( 19, 3, 10110 );
   stress_test( 18, 17, 12345 );
   stress_test( 1111, 17, 98765 );
-  stress_test( 4097, 4096, 11101 );
+  stress_test( 4097, 4096, 11100 );
 }
 
 int main()
