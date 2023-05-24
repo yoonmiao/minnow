@@ -14,14 +14,14 @@ protected:
   uint64_t capacity_;
   // Please add any additional state to the ByteStream here, and not to the Writer and Reader interfaces.
   uint64_t input_ended_ = false;
-  uint64_t size_ = 0;
   uint64_t nwrite_ = 0;
   uint64_t nread_ = 0;
+  bool error_ = false;
+  bool closed_ = false;
   std::deque<char> buf_ {};
 
 public:
   explicit ByteStream( uint64_t capacity );
-
   // Helper functions (provided) to access the ByteStream's Reader and Writer interfaces
   Reader& reader();
   const Reader& reader() const;
