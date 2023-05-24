@@ -9,6 +9,7 @@ ByteStream::ByteStream( uint64_t capacity ) : capacity_( capacity ) {}
 void Writer::push( string data )
 {
   // Your code here.
+  
   (void)data;
 }
 

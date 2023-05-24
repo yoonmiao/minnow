@@ -56,6 +56,7 @@ Address Socket::get_address( const string& name_of_function,
                              const function<int( int, sockaddr*, socklen_t* )>& function ) const
 {
   Address::Raw address;
+  
   socklen_t size = sizeof( address );
 
   CheckSystemCall( name_of_function, function( fd_num(), address, &size ) );
