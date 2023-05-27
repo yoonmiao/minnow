@@ -3,7 +3,7 @@
 #include "byte_stream.hh"
 
 #include <string>
-
+#include <unordered_map>
 class Reassembler
 {
 public:
@@ -31,4 +31,13 @@ public:
 
   // How many bytes are stored in the Reassembler itself?
   uint64_t bytes_pending() const;
+
+private:
+  std::unordered_map<size_t, char> map_ {};
+
+  size_t first_unread_ = 0;         //  第一个没被读的byte的索引。其大小等于上层已经从bytestream读走了多少bytess
+  size_t first_unassembled_ = 0;
+  size_t first_unacceptable_ = 0;
+  bool eof_flag_ = false;
+  size_t eof_idx_ = 0;
 };
