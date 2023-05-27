@@ -7,7 +7,7 @@
  *    - starts at an arbitrary "zero point" (initial value), and
  *    - wraps back to zero when it reaches 2^32 - 1.
  */
-
+//32位，超出32位unsigned int上限时，重回0开始计数
 class Wrap32
 {
 protected:
