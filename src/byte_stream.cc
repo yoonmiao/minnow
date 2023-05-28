@@ -22,20 +22,17 @@ void Writer::push( string data )
 
 void Writer::close()
 {
-  // Your code here.
   closed_ = true;
 }
 
 void Writer::set_error()
 {
-  // Your code here.
   error_ = true;
   return;
 }
 
 bool Writer::is_closed() const
 {
-  // Your code here.
   return closed_;
 }
 
