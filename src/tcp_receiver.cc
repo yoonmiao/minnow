@@ -4,7 +4,7 @@ using namespace std;
 
 void TCPReceiver::receive( TCPSenderMessage message, Reassembler& reassembler, Writer& inbound_stream )
 {
-  // Your code here.
+  
   if(!syn_flag_){
     if(!message.SYN) return;
     syn_flag_ = true;
@@ -42,5 +42,5 @@ TCPReceiverMessage TCPReceiver::send( const Writer& inbound_stream ) const
   //如果Bytestream关闭了，也就是说接收到了一个FIN,而FIN是会占据seqno的，所以我们需要给checkpoint加一
   if(fin_flag_ && inbound_stream.writer().is_closed()) abs_ackno += 1;
   msg.ackno = Wrap32::wrap(abs_ackno, isn_);
-  return msg; 
+  return msg;
 }

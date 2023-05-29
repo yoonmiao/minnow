@@ -8,8 +8,29 @@ class TCPSender
 {
   Wrap32 isn_;
   uint64_t initial_RTO_ms_;
+  uint64_t retransmission_timeout_;//for exponential backoff
 
+  bool sys_flag_ = false;
+  bool fin_flag_ = false;
+
+  uint64_t window_size_ = 1;
+  uint64_t outstanding_bytes_ = 0;
+
+  uint64_t consecutive_retransmissions_num_ = 0;
+
+  std::deque<TCPSenderMessage> message_ {};
+  std::deque<TCPSenderMessage> outstanding_message_ {};
+
+  // the (absolute) sequence number for the next byte to be sent
+  uint64_t next_seqno_ = 0;
+
+  // last ackno
+  uint64_t _recv_ackno = 0;
+
+
+ 
 public:
+
   /* Construct TCP sender with given default Retransmission Timeout and possible ISN */
   TCPSender( uint64_t initial_RTO_ms, std::optional<Wrap32> fixed_isn );
 

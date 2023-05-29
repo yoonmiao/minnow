@@ -7,19 +7,20 @@ using namespace std;
 
 /* TCPSender constructor (uses a random ISN if none given) */
 TCPSender::TCPSender( uint64_t initial_RTO_ms, optional<Wrap32> fixed_isn )
-  : isn_( fixed_isn.value_or( Wrap32 { random_device()() } ) ), initial_RTO_ms_( initial_RTO_ms )
+  : isn_( fixed_isn.value_or( Wrap32 { random_device()() } ) ), initial_RTO_ms_( initial_RTO_ms ),
+  retransmission_timeout_(initial_RTO_ms_)
 {}
 
 uint64_t TCPSender::sequence_numbers_in_flight() const
 {
-  // Your code here.
-  return {};
+
+  return outstanding_bytes_;
 }
 
 uint64_t TCPSender::consecutive_retransmissions() const
 {
-  // Your code here.
-  return {};
+  
+  return consecutive_retransmissions_num_;
 }
 
 optional<TCPSenderMessage> TCPSender::maybe_send()
@@ -30,8 +31,9 @@ optional<TCPSenderMessage> TCPSender::maybe_send()
 
 void TCPSender::push( Reader& outbound_stream )
 {
-  // Your code here.
-  (void)outbound_stream;
+  if(fin_flag_) return;
+
+  
 }
 
 TCPSenderMessage TCPSender::send_empty_message() const
