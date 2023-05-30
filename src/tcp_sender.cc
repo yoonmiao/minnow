@@ -25,8 +25,12 @@ uint64_t TCPSender::consecutive_retransmissions() const
 
 optional<TCPSenderMessage> TCPSender::maybe_send()
 {
-  // Your code here.
-  return {};
+  if ( message_.empty() )
+    return {};
+
+  TCPSenderMessage msg = message_.front();
+  message_.pop_front();
+  return msg;
 }
 
 void TCPSender::push( Reader& outbound_stream )
@@ -114,5 +118,16 @@ void TCPSender::receive( const TCPReceiverMessage& msg )
 
 void TCPSender::tick( const size_t ms_since_last_tick )
 {
-  
+  if ( timer_.is_expired( ms_since_last_tick, retransmission_timeout_ ) ) {
+    message_.push_back( outstanding_message_.front() );
+    if ( window_size_ != 0 ) {
+      retransmission_timeout_ <<= 1; // exponential backoff
+      consecutive_retransmissions_num_++;
+    }
+
+    maybe_send();
+    timer_.start();
+  } else {
+    return;
+  }
 }
