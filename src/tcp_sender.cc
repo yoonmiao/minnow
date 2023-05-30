@@ -99,12 +99,18 @@ void TCPSender::receive( const TCPReceiverMessage& msg )
     return;
 
   // wrap, unwrap转换得到新的ackno
-  recv_ackno_ = msg.ackno.value().unwrap( isn_, recv_ackno_ );
+  auto new_recv_ackno_ = msg.ackno.value().unwrap( isn_, recv_ackno_ );
   window_size_ = msg.window_size;
 
-  if ( recv_ackno_ > next_seqno_ )
+  //test "Impossible ackno (beyond next seqno) is ignored"
+  //invalid recv_ackno, next_seqno - recv_ackno is invalid, can't get 
+  //correct bytes in flight
+  if (new_recv_ackno_ > next_seqno_ ){
     return;
-
+  }else{
+    recv_ackno_ = new_recv_ackno_;
+  }
+  
   while ( !outstanding_message_.empty() ) {
     auto front_msg = outstanding_message_.front();
     uint64_t front_seqno = front_msg.seqno.unwrap( isn_, recv_ackno_ );
