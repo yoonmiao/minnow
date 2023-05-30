@@ -15,10 +15,9 @@ public:
 
   /* The TCPReceiver sends TCPReceiverMessages back to the TCPSender. */
   TCPReceiverMessage send( const Writer& inbound_stream ) const;
+
 private:
   bool syn_flag_ = false;
   bool fin_flag_ = false;
-  Wrap32 isn_ {0};
-
-
+  Wrap32 isn_ { 0 };
 };

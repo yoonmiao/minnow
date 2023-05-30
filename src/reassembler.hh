@@ -35,7 +35,7 @@ public:
 private:
   std::unordered_map<size_t, char> map_ {};
 
-  size_t first_unread_ = 0;         //  第一个没被读的byte的索引。其大小等于上层已经从bytestream读走了多少bytess
+  size_t first_unread_ = 0; //  第一个没被读的byte的索引。其大小等于上层已经从bytestream读走了多少bytess
   size_t first_unassembled_ = 0;
   size_t first_unacceptable_ = 0;
   bool eof_flag_ = false;

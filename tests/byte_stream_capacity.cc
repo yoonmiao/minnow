@@ -11,7 +11,7 @@ int main()
   try {
     {
       ByteStreamTestHarness test { "overwrite", 2 };
-      
+
       test.execute( Push { "cat" } );
       test.execute( IsClosed { false } );
       test.execute( BufferEmpty { false } );
@@ -31,7 +31,7 @@ int main()
       test.execute( BytesPushed { 2 } );
       test.execute( AvailableCapacity { 0 } );
       test.execute( BytesBuffered { 2 } );
-      test.execute( Peek { "ca" } ); 
+      test.execute( Peek { "ca" } );
     }
 
     {
