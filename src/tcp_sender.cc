@@ -40,11 +40,11 @@ void TCPSender::push( Reader& outbound_stream )
     return;
 
   // special case
-  //we just treat a '0' window size as equal to '1' but don't back off RTO
-  //we don't change the actual window_size_
-  
+  // we just treat a '0' window size as equal to '1' but don't back off RTO
+  // we don't change the actual window_size_
+
   uint64_t remaining_size = static_cast<uint64_t>( window_size_ ) + recv_ackno_ - next_seqno_;
-  if(window_size_ == 0){
+  if ( window_size_ == 0 ) {
     remaining_size += 1;
   }
   // 发送窗口是根据接收端返回的ackno向前移动的，如果recv_ackno不动，发送窗口的起点不能向前移动
@@ -111,15 +111,14 @@ void TCPSender::receive( const TCPReceiverMessage& msg )
   // test "Impossible ackno (beyond next seqno) is ignored"
   // invalid recv_ackno, next_seqno - recv_ackno is invalid, can't get
   // correct bytes in flight
-  if ( new_recv_ackno_ > next_seqno_ ) { //invalid ackno byond next_seqno
+  if ( new_recv_ackno_ > next_seqno_ ) { // invalid ackno byond next_seqno
     return;
-  } else if(new_recv_ackno_ <= recv_ackno_){//outdated ackno, too old ackno
-  //test "Repeated ACKs and outdated ACKs are harmless"
+  } else if ( new_recv_ackno_ <= recv_ackno_ ) { // outdated ackno, too old ackno
+    // test "Repeated ACKs and outdated ACKs are harmless"
     return;
-  }else {
+  } else {
     recv_ackno_ = new_recv_ackno_;
   }
-  
 
   while ( !outstanding_message_.empty() ) {
     auto front_msg = outstanding_message_.front();
@@ -134,8 +133,8 @@ void TCPSender::receive( const TCPReceiverMessage& msg )
     }
   }
 
-  //及时关闭timer_
-  if(outstanding_message_.empty()){
+  // 及时关闭timer_
+  if ( outstanding_message_.empty() ) {
     timer_.stop();
   }
 }

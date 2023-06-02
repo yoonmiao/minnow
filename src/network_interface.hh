@@ -4,6 +4,7 @@
 #include "ethernet_frame.hh"
 #include "ipv4_datagram.hh"
 
+#include <deque>
 #include <iostream>
 #include <list>
 #include <optional>
@@ -34,12 +35,34 @@
 // and learns or replies as necessary.
 class NetworkInterface
 {
+  static constexpr uint64_t initial_ARP_Entry_ttl = 30 * 1000;
+  static constexpr uint64_t initial_arp_request_ttl = 5 * 1000;
+
+  struct ARP_Entry
+  {
+    EthernetAddress eth_addr {};
+    uint64_t ttl = NetworkInterface::initial_ARP_Entry_ttl;
+  };
+
 private:
   // Ethernet (known as hardware, network-access, or link-layer) address of the interface
   EthernetAddress ethernet_address_;
 
   // IP (known as Internet-layer or network-layer) address of the interface
   Address ip_address_;
+
+  // ip to arp_entry(key:eth_addr, val:ttl) table
+  std::unordered_map<uint32_t, ARP_Entry> arp_table_ {};
+
+  // Ethernet frames to be sent
+  std::deque<EthernetFrame> frames_out_ {};
+
+  // datagrams we can't send since we don't know the destination link-layer address
+  std::deque<std::pair<Address, InternetDatagram>> outstanding_datagrams_ {};
+
+  std::unordered_map<uint32_t, uint64_t> outstanding_arp_requests_ {};
+
+  uint64_t time_ {};
 
 public:
   // Construct a network interface with given Ethernet (network-access-layer) and IP (internet-layer)
