@@ -55,6 +55,16 @@ class Router
   // The router's collection of network interfaces
   std::vector<AsyncNetworkInterface> interfaces_ {};
 
+  struct RouteEntry
+  {
+    const uint32_t route_prefix;
+    const uint8_t prefix_length;
+    const std::optional<Address> next_hop;
+    const size_t interface_num;
+  };
+
+  std::vector<RouteEntry> route_table_ {};
+
 public:
   // Add an interface to the router
   // interface: an already-constructed network interface
@@ -81,4 +91,6 @@ public:
   // route with the longest prefix_length that matches the datagram's
   // destination address.
   void route();
+
+  void route_one_datagram( InternetDatagram& dgram );
 };
